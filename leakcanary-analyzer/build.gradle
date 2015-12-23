@@ -1,3 +1,5 @@
+apply plugin: 'maven'
+
 version rootProject.ext.VERSION_NAME
 group rootProject.ext.GROUP
 
@@ -54,5 +56,17 @@ task sourceJar(type: Jar) {
   from 'src/main/java'
 }
 
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      pom {
+        groupId = 'com.squareup.leakcanary'
+        artifactId = 'leakcanary-analyzer'
+        version = rootProject.ext.VERSION_NAME
+      }
+      repository(url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath)
+    }
+  }
+}
+
 apply from: rootProject.file('gradle/checkstyle.gradle')
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

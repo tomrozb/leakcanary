@@ -1,3 +1,5 @@
+apply plugin: 'maven'
+
 version rootProject.ext.VERSION_NAME
 group rootProject.ext.GROUP
 
@@ -34,9 +36,28 @@ android {
   }
 }
 
-task sourceJar(type: Jar) {
-  from 'src/main/java'
+tasks.withType(JavaCompile) {
+  options.compilerArgs << "-Xlint:unchecked"
+  options.compilerArgs << "-Xlint:deprecation"
+}
+
+allprojects {
+  tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+  }
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      pom {
+        groupId = 'com.squareup.leakcanary'
+        artifactId = 'leakcanary-android'
+        version = rootProject.ext.VERSION_NAME
+      }
+      repository(url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath)
+    }
+  }
 }
 
 apply from: rootProject.file('gradle/checkstyle.gradle')
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

@@ -95,6 +95,9 @@ public final class HahaHelper {
     }
     checkNotNull(count, "count");
     checkNotNull(charArray, "charArray");
+    if (offset == null) {
+      offset = 0;
+    }
     checkNotNull(offset, "offset");
 
     if (count == 0) {
@@ -140,7 +143,8 @@ public final class HahaHelper {
         return (T) fieldValue.getValue();
       }
     }
-    throw new IllegalArgumentException("Field " + fieldName + " does not exists");
+    return null;
+    // throw new IllegalArgumentException("Field " + fieldName + " does not exists");
   }
 
   private HahaHelper() {
